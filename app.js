@@ -354,390 +354,89 @@ const FORM_ENDPOINT = "https://api.web3forms.com/submit";
 })();
 
 // ===== 360° PANORAMA VIEWER =====
+let updateMockupTourImage;
 (function init360Viewer() {
-    const canvas  = document.getElementById('pano-canvas');
-    const viewer  = document.getElementById('pano-viewer');
-    const overlay = document.getElementById('viewer-overlay');
-    if (!canvas || !viewer) return;
+    const viewer = document.getElementById('pano-viewer');
+    const img = document.getElementById('mockup-tour-img');
+    const locationText = document.getElementById('mockup-location-text');
+    const compassNeedle = document.querySelector('.mockup-compass-needle');
+    if (!viewer || !img) return;
 
-    const ctx = canvas.getContext('2d');
-    let W, H;
-
-    function resize() {
-        W = canvas.width  = viewer.offsetWidth;
-        H = canvas.height = viewer.offsetHeight;
-    }
-    resize();
-    window.addEventListener('resize', resize);
-
-    // State
-    let yaw = 0, fov = 90, targetYaw = 0, isDragging = false;
-    let lastX = 0, autoSpeed = 0.15;
-    const CAVE_WIDTH = 3600;
-
-    // Custom rounded rect fallback
-    function drawRoundedRect(cx, x, y, w, h, r) {
-        r = Math.min(r, w / 2, h / 2);
-        cx.beginPath();
-        cx.moveTo(x + r, y);
-        cx.lineTo(x + w - r, y);
-        cx.quadraticCurveTo(x + w, y, x + w, y + r);
-        cx.lineTo(x + w, y + h - r);
-        cx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
-        cx.lineTo(x + r, y + h);
-        cx.quadraticCurveTo(x, y + h, x, y + h - r);
-        cx.lineTo(x, y + r);
-        cx.quadraticCurveTo(x, y, x + r, y);
-        cx.closePath();
-    }
-
-    // Stone wall texture rendering
-    function drawStoneWall(ox, w, h) {
-        // Base stone gradient
-        const gradient = ctx.createLinearGradient(0, 0, 0, h);
-        gradient.addColorStop(0, '#100a08');
-        gradient.addColorStop(0.3, '#211510');
-        gradient.addColorStop(0.6, '#1a100d');
-        gradient.addColorStop(1, '#0C0A09');
-        ctx.fillStyle = gradient;
-        ctx.fillRect(0, 0, w, h);
-
-        // Stone blocks
-        const stoneH = 32;
-        let seed = 98765;
-        function pseudoRandom() {
-            seed = (seed * 16807 + 0) % 2147483647;
-            return (seed & 0x7fffffff) / 2147483647;
-        }
-
-        for (let row = 0; row < h * 0.7; row += stoneH) {
-            let stoneW = 50 + pseudoRandom() * 40;
-            const offsetRow = (Math.floor(row / stoneH) % 2) * 25;
-
-            for (let col = -stoneW; col < w + stoneW; col += stoneW) {
-                const sx = col + offsetRow + ((ox * 0.4) % stoneW);
-                const sy = row;
-                const sw = stoneW - 2;
-                const sh = stoneH - 2;
-
-                const brightness = 0.08 + pseudoRandom() * 0.08;
-                ctx.fillStyle = 'rgba(' +
-                    Math.floor(100 + pseudoRandom() * 30) + ',' +
-                    Math.floor(70 + pseudoRandom() * 20) + ',' +
-                    Math.floor(45 + pseudoRandom() * 15) + ',' +
-                    brightness + ')';
-                ctx.fillRect(sx, sy, sw, sh);
-
-                // Mortar joints
-                ctx.fillStyle = 'rgba(8,4,2,0.4)';
-                ctx.fillRect(sx + sw, sy, 2, sh + 2);
-                ctx.fillRect(sx, sy + sh, sw + 2, 2);
-            }
-            stoneW = 45 + pseudoRandom() * 50;
-        }
-    }
-
-    // Vaulted ribs ceiling
-    function drawCeiling(w, h) {
-        ctx.save();
-        const archH = h * 0.35;
-        const ceilGrad = ctx.createLinearGradient(0, 0, 0, archH);
-        ceilGrad.addColorStop(0, 'rgba(10,6,4,0.95)');
-        ceilGrad.addColorStop(0.6, 'rgba(26,16,10,0.6)');
-        ceilGrad.addColorStop(1, 'rgba(26,16,10,0.0)');
-        ctx.fillStyle = ceilGrad;
-        ctx.fillRect(0, 0, w, archH);
-
-        const archCount = 5;
-        const spacing = w / archCount;
-        ctx.strokeStyle = 'rgba(75,50,30,0.35)';
-        ctx.lineWidth = 4;
-        for (let i = 0; i < archCount; i++) {
-            const cx = spacing * i + spacing / 2;
-            ctx.beginPath();
-            ctx.arc(cx, archH * 0.9, spacing * 0.4, Math.PI, 0);
-            ctx.stroke();
-        }
-        ctx.restore();
-    }
-
-    // Coded wooden barrel
-    function drawBarrel(bx, by, scale) {
-        const s = scale || 1;
-        const bw = 70 * s;
-        const bh = 95 * s;
-
-        ctx.save();
-        ctx.translate(bx, by);
-
-        // Barrel shadow
-        ctx.fillStyle = 'rgba(0,0,0,0.45)';
-        ctx.beginPath();
-        ctx.ellipse(0, bh * 0.48, bw * 0.6, 12 * s, 0, 0, Math.PI * 2);
-        ctx.fill();
-
-        // Barrel body gradient
-        const bGrad = ctx.createLinearGradient(-bw / 2, 0, bw / 2, 0);
-        bGrad.addColorStop(0, '#2d1a0e');
-        bGrad.addColorStop(0.3, '#5c3a1e');
-        bGrad.addColorStop(0.5, '#6a4524');
-        bGrad.addColorStop(0.7, '#5c3a1e');
-        bGrad.addColorStop(1, '#25140a');
-        ctx.fillStyle = bGrad;
-
-        ctx.beginPath();
-        ctx.ellipse(0, 0, bw / 2, bh / 2, 0, 0, Math.PI * 2);
-        ctx.fill();
-
-        // Staves / Planks lines
-        ctx.strokeStyle = 'rgba(15,8,4,0.35)';
-        ctx.lineWidth = 1;
-        [-0.3, -0.1, 0.1, 0.3].forEach(pos => {
-            ctx.beginPath();
-            ctx.ellipse(0, 0, bw * 0.5 * Math.abs(pos), bh / 2, 0, -Math.PI / 2, Math.PI / 2);
-            ctx.stroke();
-        });
-
-        // Metal hoops
-        ctx.strokeStyle = '#2d2d2d';
-        ctx.lineWidth = 3.5 * s;
-        const hoopPos = [-0.35, -0.1, 0.15, 0.4];
-        hoopPos.forEach(hY => {
-            const bandY = hY * bh;
-            ctx.beginPath();
-            ctx.ellipse(0, bandY, bw / 2 * Math.cos(hY * 0.7), 4.5 * s, 0, 0, Math.PI * 2);
-            ctx.stroke();
-
-            // Band metallic highlights
-            ctx.strokeStyle = 'rgba(150,150,140,0.3)';
-            ctx.lineWidth = 1;
-            ctx.beginPath();
-            ctx.ellipse(0, bandY - 1, bw / 2 * Math.cos(hY * 0.7), 3 * s, 0, 0, Math.PI);
-            ctx.stroke();
-            ctx.strokeStyle = '#2d2d2d';
-            ctx.lineWidth = 3.5 * s;
-        });
-
-        // Bung hole
-        ctx.fillStyle = '#170c06';
-        ctx.beginPath();
-        ctx.arc(0, 0, 4.5 * s, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.strokeStyle = '#3a2010';
-        ctx.lineWidth = 1;
-        ctx.stroke();
-
-        ctx.restore();
-    }
-
-    // Coded wall torch
-    function drawTorch(tx, ty, time) {
-        ctx.save();
-        ctx.translate(tx, ty);
-
-        // Bracket
-        ctx.fillStyle = '#262626';
-        ctx.fillRect(-2, 0, 4, 20);
-        ctx.fillStyle = '#333333';
-        ctx.fillRect(-6, 18, 12, 4);
-
-        // Torch handle
-        ctx.fillStyle = '#4c2f18';
-        ctx.fillRect(-3, -16, 6, 18);
-
-        const flicker = 1 + Math.sin(time * 7 + tx) * 0.08;
-        const flicker2 = Math.cos(time * 10 + tx * 0.5) * 2;
-
-        // Radial glow
-        const glowGrad = ctx.createRadialGradient(flicker2, -28, 2, 0, -20, 180 * flicker);
-        glowGrad.addColorStop(0, 'rgba(255,160,40,0.22)');
-        glowGrad.addColorStop(0.5, 'rgba(255,90,15,0.08)');
-        glowGrad.addColorStop(1, 'rgba(0,0,0,0)');
-        ctx.fillStyle = glowGrad;
-        ctx.fillRect(-100, -110, 200, 160);
-
-        // Outer Flame
-        ctx.fillStyle = 'rgba(255,170,40,0.85)';
-        ctx.beginPath();
-        ctx.moveTo(-5 + flicker2, -16);
-        ctx.quadraticCurveTo(-8 + flicker2, -30, flicker2 * 0.5, -45 + flicker * 3);
-        ctx.quadraticCurveTo(8 + flicker2, -30, 5 + flicker2, -16);
-        ctx.fill();
-
-        // Inner Core Flame
-        ctx.fillStyle = 'rgba(255,230,90,0.95)';
-        ctx.beginPath();
-        ctx.moveTo(-2.5, -16);
-        ctx.quadraticCurveTo(-4, -28, 0, -38);
-        ctx.quadraticCurveTo(4, -28, 2.5, -16);
-        ctx.fill();
-
-        ctx.restore();
-    }
-
-    // Dust motes
-    const dustMotes = [];
-    for (let d = 0; d < 25; d++) {
-        dustMotes.push({
-            x: Math.random() * 1200,
-            y: Math.random() * 450,
-            r: Math.random() * 1.5 + 0.4,
-            speed: Math.random() * 0.12 + 0.04,
-            drift: Math.random() * 0.2 - 0.1,
-            phase: Math.random() * Math.PI * 2
-        });
-    }
-
-    // Generate a rich cave panorama scene
-    function drawScene() {
-        ctx.clearRect(0, 0, W, H);
-        const time = Date.now() / 1000;
-        const yawRad = (yaw * Math.PI) / 180;
-        const offset = ((yaw * 6) % CAVE_WIDTH + CAVE_WIDTH) % CAVE_WIDTH;
-
-        // 1. Draw stone masonry wall
-        drawStoneWall(offset, W + 100, H);
-
-        // 2. Draw Ribbed ceiling
-        drawCeiling(W, H);
-
-        // 3. Draw Floor
-        const floorY = H * 0.72;
-        const floorGrad = ctx.createLinearGradient(0, floorY, 0, H);
-        floorGrad.addColorStop(0, 'rgba(30,18,10,0.0)');
-        floorGrad.addColorStop(0.3, 'rgba(20,12,6,0.65)');
-        floorGrad.addColorStop(1, '#0a0604');
-        ctx.fillStyle = floorGrad;
-        ctx.fillRect(0, floorY, W, H - floorY);
-
-        // Floor stones perspective
-        ctx.strokeStyle = 'rgba(60,40,20,0.12)';
-        ctx.lineWidth = 1;
-        for (let fi = 0; fi < W; fi += 70) {
-            const fx = fi - (offset * 0.25) % 70;
-            ctx.beginPath();
-            ctx.moveTo(fx, floorY + 10);
-            ctx.lineTo(fx * 1.1 - W * 0.05, H);
-            ctx.stroke();
-        }
-
-        // 4. Draw Oak Barrels in Two Rows
-        const barrelSpacing = W * 0.35;
-        // Foreground Row
-        for (let i = 0; i < 4; i++) {
-            const bx = ((i * barrelSpacing - offset * 0.5 + CAVE_WIDTH * 2) % (W * 1.4)) - W * 0.2;
-            if (bx > -100 && bx < W + 100) {
-                drawBarrel(bx, H * 0.64, 0.95);
-            }
-        }
-        // Background Row
-        for (let i = 0; i < 3; i++) {
-            const bx = (((i + 0.5) * barrelSpacing - offset * 0.5 + CAVE_WIDTH * 2) % (W * 1.4)) - W * 0.2;
-            if (bx > -100 && bx < W + 100) {
-                drawBarrel(bx, H * 0.56, 0.78);
-            }
-        }
-
-        // 5. Draw Flickering wall torches
-        const torchSpacing = W * 0.8;
-        for (let i = 0; i < 2; i++) {
-            const tx = ((i * torchSpacing - offset * 0.3 + CAVE_WIDTH * 2) % (W * 1.6)) - W * 0.3;
-            if (tx > -60 && tx < W + 60) {
-                drawTorch(tx, H * 0.3, time);
-            }
-        }
-
-        // 6. Draw floating dust motes
-        ctx.globalAlpha = 0.55;
-        dustMotes.forEach(mote => {
-            mote.y -= mote.speed;
-            mote.x += mote.drift + Math.sin(time * 0.4 + mote.phase) * 0.15;
-            mote.phase += 0.008;
-
-            if (mote.y < -10) {
-                mote.y = H + 10;
-                mote.x = Math.random() * W;
-            }
-
-            const alpha = 0.25 + Math.sin(time * 1.5 + mote.phase) * 0.18;
-            ctx.fillStyle = 'rgba(245,166,35,' + alpha + ')';
-            ctx.beginPath();
-            ctx.arc((mote.x - offset * 0.08 + W * 2) % (W + 40) - 20, mote.y, mote.r, 0, Math.PI * 2);
-            ctx.fill();
-        });
-        ctx.globalAlpha = 1;
-
-        // 7. Vignette shadow overlay
-        const vigGrad = ctx.createRadialGradient(W / 2, H / 2, W * 0.15, W / 2, H / 2, W * 0.72);
-        vigGrad.addColorStop(0, 'rgba(0,0,0,0)');
-        vigGrad.addColorStop(0.5, 'rgba(0,0,0,0.18)');
-        vigGrad.addColorStop(0.8, 'rgba(0,0,0,0.48)');
-        vigGrad.addColorStop(1, 'rgba(0,0,0,0.85)');
-        ctx.fillStyle = vigGrad;
-        ctx.fillRect(0, 0, W, H);
-    }
-
-    let animFrame;
-    function loop() {
-        if (!isDragging) {
-            yaw += autoSpeed;
-        }
-        yaw += (targetYaw - yaw) * 0.08;
-        targetYaw += 0.002;
-        if (yaw > 360) yaw -= 360;
-        if (targetYaw > 360) targetYaw -= 360;
-        drawScene();
-        animFrame = requestAnimationFrame(loop);
-    }
-    loop();
-
-    // Drag controls
-    viewer.addEventListener('mousedown', e => {
-        isDragging = true;
-        lastX = e.clientX;
-        if (overlay && !overlay.classList.contains('fade-out')) {
-            overlay.classList.add('fade-out');
-            setTimeout(() => { overlay.style.display = 'none'; }, 600);
+    // Responsive 3D Parallax & Compass Rotation on Mousemove
+    viewer.addEventListener('mousemove', e => {
+        const rect = viewer.getBoundingClientRect();
+        const x = (e.clientX - rect.left) / rect.width;
+        const y = (e.clientY - rect.top) / rect.height;
+        
+        // Translate image opposite to mouse move for smooth 3D window effect
+        const tx = (x - 0.5) * -22;
+        const ty = (y - 0.5) * -16;
+        img.style.transform = `scale(1.08) translate(${tx}px, ${ty}px)`;
+        
+        // Rotate directional compass needle based on horizontal look angle
+        const angle = (x - 0.5) * 80;
+        if (compassNeedle) {
+            compassNeedle.style.transform = `translate(-50%, -50%) rotate(${angle}deg)`;
         }
     });
-    window.addEventListener('mousemove', e => {
-        if (!isDragging) return;
-        const dx = e.clientX - lastX;
-        yaw -= dx * 0.25;
-        targetYaw = yaw;
-        lastX = e.clientX;
-    });
-    window.addEventListener('mouseup', () => { isDragging = false; });
 
-    // Touch
-    viewer.addEventListener('touchstart', e => {
-        isDragging = true;
-        lastX = e.touches[0].clientX;
-        if (overlay && !overlay.classList.contains('fade-out')) {
-            overlay.classList.add('fade-out');
-            setTimeout(() => { overlay.style.display = 'none'; }, 600);
+    viewer.addEventListener('mouseleave', () => {
+        img.style.transform = 'scale(1.05) translate(0px, 0px)';
+        if (compassNeedle) {
+            compassNeedle.style.transform = 'translate(-50%, -50%) rotate(0deg)';
         }
-    }, { passive: true });
+    });
+
+    // Handle touch support for mobile parallax
     viewer.addEventListener('touchmove', e => {
-        if (!isDragging) return;
-        const dx = e.touches[0].clientX - lastX;
-        yaw -= dx * 0.25;
-        targetYaw = yaw;
-        lastX = e.touches[0].clientX;
+        if (e.touches.length === 0) return;
+        const rect = viewer.getBoundingClientRect();
+        const x = (e.touches[0].clientX - rect.left) / rect.width;
+        const y = (e.touches[0].clientY - rect.top) / rect.height;
+
+        const tx = (x - 0.5) * -15;
+        const ty = (y - 0.5) * -10;
+        img.style.transform = `scale(1.08) translate(${tx}px, ${ty}px)`;
+
+        const angle = (x - 0.5) * 60;
+        if (compassNeedle) {
+            compassNeedle.style.transform = `translate(-50%, -50%) rotate(${angle}deg)`;
+        }
     }, { passive: true });
-    viewer.addEventListener('touchend', () => { isDragging = false; });
 
-    // Buttons
-    document.getElementById('ctrl-left')?.addEventListener('click',  () => { targetYaw -= 20; });
-    document.getElementById('ctrl-right')?.addEventListener('click', () => { targetYaw += 20; });
-    document.getElementById('ctrl-zoom-in')?.addEventListener('click',  () => { fov = Math.max(40, fov - 10); });
-    document.getElementById('ctrl-zoom-out')?.addEventListener('click', () => { fov = Math.min(130, fov + 10); });
+    viewer.addEventListener('touchend', () => {
+        img.style.transform = 'scale(1.05) translate(0px, 0px)';
+        if (compassNeedle) {
+            compassNeedle.style.transform = 'translate(-50%, -50%) rotate(0deg)';
+        }
+    });
 
-    // Scroll wheel zoom
-    viewer.addEventListener('wheel', e => {
-        e.preventDefault();
-        fov = Math.min(130, Math.max(40, fov + (e.deltaY > 0 ? 5 : -5)));
-    }, { passive: false });
+    // Theme Switch Image & Location Text Swapper
+    updateMockupTourImage = function(isLight) {
+        if (isLight) {
+            img.src = 'images/hotel_bachiller_cave.jpg';
+            img.alt = 'La Casa del Bachiller Cave Room';
+            
+            // Set dynamic light theme location
+            if (locationText) {
+                locationText.dataset.key = 'showcase-location-badge-light';
+                locationText.innerHTML = currentLang === 'es' 
+                    ? 'La Casa del Bachiller — Alojamiento de Cueva' 
+                    : 'La Casa del Bachiller — Historic Cave Stay';
+            }
+        } else {
+            img.src = 'images/winery_castiblanque.jpg';
+            img.alt = 'Bodegas Castiblanque Wine Cellar';
+            
+            // Set dynamic dark theme location
+            if (locationText) {
+                locationText.dataset.key = 'showcase-location-badge';
+                locationText.innerHTML = currentLang === 'es' 
+                    ? 'Bodegas Castiblanque — Cueva de Crianza' 
+                    : 'Bodegas Castiblanque — Historic Wine Cave';
+            }
+        }
+    };
 })();
 
 // ===== INTERACTIVE PRICING CALCULATOR =====
@@ -907,15 +606,16 @@ const i18n = {
         'stat-desc-1': 'Visibilidad Local',
         'stat-title-2': 'Reservas',
         'stat-desc-2': 'Bodegas & Alojamientos',
-        'chat-bubble-1': '¡Hola! Quiero reservar una cata con visita a la cueva en 360°.',
-        'chat-bubble-2': '¡Por supuesto! Reserva confirmada. ¡Nos vemos en Criptana! 🍷',
+        'chat-name': 'Bodegas Castiblanque',
+        'chat-bubble-1': '¡Hola! Queremos integrar el tour 360° en nuestra web de reservas.',
+        'chat-bubble-2': '¡Por supuesto! Sesión agendada. ¡Vuestra cueva de barricas lucirá espectacular! 🍷',
         'nav-vision': 'Nuestra Visión',
         'nav-services': 'Servicios',
         'nav-experience': 'Demo 360°',
         'nav-calculator': 'Calcular Plan',
         'nav-contact': 'Auditoría Gratis',
         'vision-label': 'Nuestra Visión',
-        'vision-title': 'La Realidad de<br>Nuestro Pueblo.',
+        'vision-title': 'De la Tierra de Gigantes<br>al Mundo.',
         'vision-subtitle': 'Con sede física en Campo de Criptana (la histórica Tierra de Gigantes), nuestra agencia se extiende por toda la comarca de La Mancha. Ayudamos a bodegas tradicionales y alojamientos singulares de Toledo, Ciudad Real y Cuenca a competir en el mercado global.',
         'vision-accent': '"No hace falta ser Madrid para tener una presencia digital que impresione. Solo hace falta la agencia correcta."',
         'vision-card-title-1': 'Comercio de Confianza',
@@ -936,18 +636,20 @@ const i18n = {
         'service-title-3': 'Enoturismo & Marca Industrial',
         'service-desc-3': 'Para bodegas D.O. La Mancha y fábricas que quieren exportar y atraer turismo premium.',
         'setup-label-3': 'Proyecto a medida',
-        'showcase-label': 'Demo Interactiva',
-        'showcase-title': 'Camina por una<br>cueva manchega.',
-        'showcase-subtitle': 'Arrastra para explorar. Así verán tu bodega o casa rural los turistas de Madrid antes de reservar.',
-        'viewer-instruction': 'Arrastra para explorar la bodega en 360°',
+        'showcase-label': 'Caso de Éxito 360°',
+        'showcase-title': 'Visualiza la<br>calidad real.',
+        'showcase-subtitle': 'Pasa el ratón para activar el efecto de ventana 3D. Esta es la nitidez profesional e interactividad 8K que verán tus clientes internacionales antes de reservar.',
+        'showcase-launch-btn': 'Probar Tour 360° Real →',
+        'showcase-location-badge': 'Bodegas Castiblanque — Cueva de Crianza',
+        'showcase-location-badge-light': 'La Casa del Bachiller — Alojamiento de Cueva',
         'hs-title-1': 'Crianza Tradicional',
         'hs-desc-1': 'Barricas de roble americano bajo la temperatura constante de la cueva manchega.',
         'hs-title-2': 'Arquitectura Excavada',
         'hs-desc-2': 'Cueva natural excavada a mano en la roca de Campo de Criptana.',
-        'calc-label': 'Sin Letra Pequeña',
-        'calc-title': 'Calcula tu presupuesto.',
-        'calc-subtitle': 'Transparencia total. Selecciona los servicios y ve el precio al instante.',
-        'calc-options-title': 'Selecciona tus Servicios',
+        'calc-label': 'Planes Pyme & SME',
+        'calc-title': 'Kits Digitales y Starter Plans',
+        'calc-subtitle': 'Transparencia total. Selecciona los servicios express para tu comercio local o calcula una base.',
+        'calc-options-title': 'Selecciona tus Servicios Express',
         'calc-item-web-title': 'Página Web / Catálogo Express',
         'calc-item-web-desc': 'Web ultrarrápida adaptada a móviles con hosting incluido.',
         'calc-item-google-title': 'Google Maps & SEO Local',
@@ -958,6 +660,10 @@ const i18n = {
         'calc-item-tour-desc': 'Tour inmersivo para bodega, cueva o casa rural en HDR.',
         'calc-item-social-title': 'Gestión de Redes Sociales',
         'calc-item-social-desc': 'Gestión profesional enfocada en destacar la autenticidad e historia de tu marca rural en redes sociales.',
+        'calc-ent-badge': 'BODEGAS & PROYECTOS PREMIUM',
+        'calc-ent-title': '¿Buscas un proyecto de enoturismo o desarrollo a medida?',
+        'calc-ent-desc': 'Motores de reserva avanzados, posicionamiento SEO internacional, sincronización ERP, tours 360° en 8K de salas de barricas y producción audiovisual premium.',
+        'calc-ent-btn': 'Solicitar Propuesta Personalizada →',
         'calc-result-title': 'Estimación de Inversión',
         'calc-setup-label': 'Pago Único (Alta)',
         'calc-setup-desc': 'Diseño, programación y puesta en marcha.',
@@ -1015,15 +721,16 @@ const i18n = {
         'stat-desc-1': 'Local Visibility',
         'stat-title-2': 'Bookings',
         'stat-desc-2': 'Wineries & Lodgings',
-        'chat-bubble-1': 'Hi! I want to book a wine tasting with 360° cave visit.',
-        'chat-bubble-2': 'Of course! Reservation confirmed. See you in Criptana! 🍷',
+        'chat-name': 'Bodegas Castiblanque',
+        'chat-bubble-1': 'Hi! We want to integrate the 360° cave-tour viewer into our booking engine.',
+        'chat-bubble-2': 'Of course! Session scheduled. Your barrel cellars will look spectacular! 🍷',
         'nav-vision': 'Our Vision',
         'nav-services': 'Services',
         'nav-experience': '360° Demo',
         'nav-calculator': 'Pricing',
         'nav-contact': 'Free Audit',
         'vision-label': 'Our Vision',
-        'vision-title': 'The Reality of<br>Our Town.',
+        'vision-title': 'From the Land of Giants<br>to the World.',
         'vision-subtitle': 'Anchored in Campo de Criptana (Cervantes\' historic Land of Giants), we serve the entire Castile-La Mancha region, helping traditional wineries and unique cave lodgings in Toledo, Ciudad Real, and Cuenca compete in the global digital arena.',
         'vision-accent': '"You don\'t need to be Madrid to have a stunning digital presence. You just need the right agency."',
         'vision-card-title-1': 'Trusted Local Commerce',
@@ -1044,18 +751,20 @@ const i18n = {
         'service-title-3': 'Wine Tourism & Industrial Brand',
         'service-desc-3': 'For D.O. La Mancha wineries and agri-food factories wanting to export and attract premium tourism.',
         'setup-label-3': 'Custom project',
-        'showcase-label': 'Interactive Demo',
-        'showcase-title': 'Walk through a<br>La Mancha cave.',
-        'showcase-subtitle': 'Drag to explore. This is how tourists from Madrid will see your winery or rural home before booking.',
-        'viewer-instruction': 'Drag to explore the winery in 360°',
+        'showcase-label': '360° Case Study',
+        'showcase-title': 'Visualize the<br>true quality.',
+        'showcase-subtitle': 'Hover your mouse to trigger the fluid 3D parallax effect. This is the 8K pixel-perfect quality and interactivity that international tourists see before booking.',
+        'showcase-launch-btn': 'Try Real 360° Tour →',
+        'showcase-location-badge': 'Bodegas Castiblanque — Historic Wine Cave',
+        'showcase-location-badge-light': 'La Casa del Bachiller — Historic Cave Stay',
         'hs-title-1': 'Traditional Aging',
         'hs-desc-1': 'American oak barrels under the constant temperature of the La Mancha cave.',
         'hs-title-2': 'Excavated Architecture',
         'hs-desc-2': 'Natural cave hand-excavated from the rock of Campo de Criptana.',
-        'calc-label': 'No Fine Print',
-        'calc-title': 'Calculate your budget.',
-        'calc-subtitle': 'Total transparency. Select services and see the price instantly.',
-        'calc-options-title': 'Select Your Services',
+        'calc-label': 'SME Starter Plans',
+        'calc-title': 'Digital Kits & Starter Packages',
+        'calc-subtitle': 'Total transparency. Select the express services for your local trade or calculate a baseline project.',
+        'calc-options-title': 'Select Your Starter Express Services',
         'calc-item-web-title': 'Website / Express Catalogue',
         'calc-item-web-desc': 'Ultra-fast mobile-ready website with hosting included.',
         'calc-item-google-title': 'Google Maps & Local SEO',
@@ -1066,6 +775,10 @@ const i18n = {
         'calc-item-tour-desc': 'Immersive tour for winery, cave or rural house in HDR.',
         'calc-item-social-title': 'Social Media Management',
         'calc-item-social-desc': 'Professional management focused on highlighting your rural brand\'s authenticity and heritage.',
+        'calc-ent-badge': 'WINERIES & ENTERPRISE PROJECTS',
+        'calc-ent-title': 'Looking for custom enotourism development?',
+        'calc-ent-desc': 'Advanced booking engines, international SEO, custom ERP syncing, 8K HDR 360° tours of barrel cellars, and cinema-grade commercial media production.',
+        'calc-ent-btn': 'Request Custom Proposal →',
         'calc-result-title': 'Investment Estimate',
         'calc-setup-label': 'One-time Payment',
         'calc-setup-desc': 'Design, development and launch.',
@@ -1198,14 +911,21 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     if (savedTheme === 'light') {
         document.body.classList.add('light-theme');
         toggle.textContent = '☀️';
+        setTimeout(() => { if (typeof updateMockupTourImage === 'function') updateMockupTourImage(true); }, 50);
     } else {
         document.body.classList.remove('light-theme');
         toggle.textContent = '🌙';
+        setTimeout(() => { if (typeof updateMockupTourImage === 'function') updateMockupTourImage(false); }, 50);
     }
 
     toggle.addEventListener('click', () => {
         const isLight = document.body.classList.toggle('light-theme');
         localStorage.setItem('agency-theme', isLight ? 'light' : 'dark');
         toggle.textContent = isLight ? '☀️' : '🌙';
+        
+        // Dynamic swapper for premium 360 virtual tour mockup
+        if (typeof updateMockupTourImage === 'function') {
+            updateMockupTourImage(isLight);
+        }
     });
 })();

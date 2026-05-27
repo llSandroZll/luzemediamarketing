@@ -183,7 +183,7 @@
                             <div class="chat-head">
                                 <span class="chat-avatar">🍇</span>
                                 <div>
-                                    <span class="chat-name">Bodega Vidal</span>
+                                <span class="chat-name" data-key="chat-name">Bodegas Castiblanque</span>
                                     <span class="chat-online">● En línea</span>
                                 </div>
                             </div>
@@ -362,23 +362,17 @@
 
             <div class="viewer-wrapper fade-up">
                 <div class="viewer-container" id="pano-viewer">
-                    <canvas id="pano-canvas"></canvas>
-
-                    <div class="viewer-overlay" id="viewer-overlay">
-                        <div class="viewer-instruction">
-                            <span class="gesture-icon">🖱️</span>
-                            <span class="instruction-text" data-key="viewer-instruction">Arrastra para explorar la bodega en 360°</span>
-                        </div>
+                    <!-- High-Resolution Showcase Tour Image -->
+                    <img src="images/winery_castiblanque.jpg" alt="Premium 360 Showcase" class="mockup-tour-image" id="mockup-tour-img">
+                    
+                    <!-- Glassmorphic Location Overlay -->
+                    <div class="mockup-location-badge">
+                        <span class="pulse-marker">●</span>
+                        <span id="mockup-location-text" data-key="showcase-location-badge">Bodegas Castiblanque — Cueva de Crianza</span>
                     </div>
 
-                    <div class="viewer-controls">
-                        <button class="ctrl-btn" id="ctrl-left">◀</button>
-                        <button class="ctrl-btn" id="ctrl-right">▶</button>
-                        <button class="ctrl-btn" id="ctrl-zoom-in">+</button>
-                        <button class="ctrl-btn" id="ctrl-zoom-out">−</button>
-                    </div>
-
-                    <div class="hotspot" id="hotspot-crianza" style="top:50%;left:35%">
+                    <!-- Pulsing Hotspot 1 -->
+                    <div class="hotspot" id="hotspot-crianza" style="top:45%; left:30%">
                         <div class="hotspot-dot"></div>
                         <div class="hotspot-tooltip">
                             <h4 data-key="hs-title-1">Crianza Tradicional</h4>
@@ -386,12 +380,24 @@
                         </div>
                     </div>
 
-                    <div class="hotspot" id="hotspot-arquitectura" style="top:40%;left:65%">
+                    <!-- Pulsing Hotspot 2 -->
+                    <div class="hotspot" id="hotspot-arquitectura" style="top:55%; left:70%">
                         <div class="hotspot-dot"></div>
                         <div class="hotspot-tooltip">
                             <h4 data-key="hs-title-2">Arquitectura Excavada</h4>
                             <p data-key="hs-desc-2">Cueva natural excavada a mano en la roca de Campo de Criptana.</p>
                         </div>
+                    </div>
+
+                    <!-- Telemetry Overlays -->
+                    <div class="mockup-overlay-controls">
+                        <!-- Directional Compass -->
+                        <div class="mockup-compass-box">
+                            <div class="mockup-compass-needle">N</div>
+                        </div>
+                        
+                        <!-- Premium Launch CTA -->
+                        <a href="https://llsandrozll.github.io/" target="_blank" rel="noopener" class="btn btn-primary mockup-launch-btn" data-key="showcase-launch-btn">Probar Tour 360° Real →</a>
                     </div>
                 </div>
 
@@ -470,6 +476,12 @@
                                 <span class="calc-label-desc" data-key="calc-item-social-desc">Publicaciones semanales enfocadas en Criptana y comarca.</span>
                             </div>
                         </label>
+                    <!-- Enterprise callout card -->
+                    <div class="calc-enterprise-card">
+                        <div class="enterprise-badge" data-key="calc-ent-badge">BODEGAS & PROYECTOS PREMIUM</div>
+                        <h4 class="enterprise-title" data-key="calc-ent-title">¿Buscas un proyecto de enoturismo o desarrollo a medida?</h4>
+                        <p class="enterprise-desc" data-key="calc-ent-desc">Motores de reserva avanzados, posicionamiento SEO internacional, sincronización ERP, tours 360° en 8K de salas de barricas y producción audiovisual premium.</p>
+                        <a href="#contacto" class="btn btn-outline btn-block" data-key="calc-ent-btn">Solicitar Propuesta Personalizada →</a>
                     </div>
                 </div>
 

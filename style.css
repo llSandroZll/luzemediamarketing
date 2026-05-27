@@ -919,84 +919,184 @@ body::after {
     border: 1px solid var(--border-light);
     position: relative;
     overflow: hidden;
-    cursor: grab;
+    cursor: crosshair;
 }
 
-.viewer-container:active { cursor: grabbing; }
 .viewer-container::before {
     content: '';
     position: absolute;
     inset: 0;
-    border: 1px solid rgba(245,166,35,0.1);
-    z-index: 2;
+    border: 1px solid rgba(245,166,35,0.08);
+    z-index: 5;
     pointer-events: none;
 }
 
-#pano-canvas { width: 100%; height: 100%; display: block; }
+/* Premium 3D Parallax image */
+.mockup-tour-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: scale(1.05);
+    transition: transform 0.12s ease-out;
+    will-change: transform;
+    display: block;
+}
 
-.viewer-overlay {
+/* Glassmorphic Location Badge */
+.mockup-location-badge {
     position: absolute;
-    inset: 0;
+    top: 20px;
+    left: 20px;
     background: rgba(6,6,8,0.65);
-    backdrop-filter: blur(6px);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 10;
-    transition: opacity 0.5s;
-}
-.viewer-overlay.fade-out { opacity: 0; pointer-events: none; }
-
-.viewer-instruction {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 12px;
-    background: rgba(0,0,0,0.6);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     border: 1px solid var(--border-light);
-    padding: 2rem 2.5rem;
-}
-
-.gesture-icon { font-size: 2.2rem; animation: drag-hint 1.8s infinite ease-in-out; }
-@keyframes drag-hint {
-    0%, 100% { transform: translateX(0); }
-    50% { transform: translateX(-15px); }
-}
-
-.instruction-text {
-    font-family: var(--font-display);
-    font-size: 0.9rem;
-    font-weight: 700;
+    padding: 6px 14px;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.72rem;
+    font-weight: 600;
     color: var(--white);
-    letter-spacing: 0.03em;
+    font-family: var(--font-body);
 }
 
-.viewer-controls {
+.pulse-marker {
+    color: #28c840;
+    font-size: 0.9rem;
+    line-height: 1;
+    animation: marker-pulse 2s infinite ease-in-out;
+}
+
+@keyframes marker-pulse {
+    0%, 100% { opacity: 0.3; transform: scale(0.9); }
+    50% { opacity: 1; transform: scale(1.1); }
+}
+
+/* Telemetry Overlays */
+.mockup-overlay-controls {
     position: absolute;
     bottom: 20px;
+    left: 20px;
     right: 20px;
     display: flex;
-    gap: 4px;
-    z-index: 20;
+    justify-content: space-between;
+    align-items: flex-end;
+    z-index: 10;
+    pointer-events: none;
 }
 
-.ctrl-btn {
-    width: 38px; height: 38px;
-    background: rgba(6,6,8,0.8);
+/* Compass */
+.mockup-compass-box {
+    width: 46px;
+    height: 46px;
+    background: rgba(6,6,8,0.65);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     border: 1px solid var(--border-light);
-    color: var(--white);
-    font-size: 1rem;
-    font-weight: bold;
-    cursor: pointer;
+    border-radius: 50%;
+    position: relative;
+    pointer-events: auto;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: all 0.3s;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
 }
-.ctrl-btn:hover {
-    background: var(--amber);
-    color: var(--black);
-    border-color: var(--amber);
+
+.mockup-compass-needle {
+    font-family: var(--font-display);
+    font-size: 0.68rem;
+    font-weight: 900;
+    color: var(--amber);
+    transition: transform 0.15s ease-out;
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%) rotate(0deg);
+}
+
+.mockup-compass-box::before {
+    content: '';
+    position: absolute;
+    inset: 4px;
+    border: 1px dashed rgba(255,255,255,0.15);
+    border-radius: 50%;
+}
+
+.mockup-launch-btn {
+    pointer-events: auto;
+    font-size: 0.78rem;
+    padding: 0.65rem 1.4rem;
+    box-shadow: 0 10px 25px var(--amber-glow);
+}
+
+/* ===== ENTERPRISE B2B PROPOSAL CARD ===== */
+.calc-enterprise-card {
+    background: linear-gradient(135deg, var(--surface-2), var(--surface));
+    border: 1px solid var(--border);
+    border-left: 3.5px solid var(--amber);
+    padding: 2.2rem;
+    margin-top: 2.2rem;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s var(--ease-out);
+    text-align: left;
+}
+
+.calc-enterprise-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(45deg, transparent, var(--amber-dim), transparent);
+    opacity: 0;
+    transition: opacity 0.4s var(--ease-out);
+    pointer-events: none;
+}
+
+.calc-enterprise-card:hover {
+    border-color: var(--border-light);
+    border-left-color: var(--amber);
+    transform: translateY(-2px);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+}
+
+.calc-enterprise-card:hover::before {
+    opacity: 0.45;
+}
+
+.enterprise-badge {
+    font-family: var(--font-body);
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--amber);
+    background: var(--amber-dim);
+    padding: 4px 10px;
+    border-radius: 2px;
+    display: inline-block;
+    margin-bottom: 0.9rem;
+}
+
+.enterprise-title {
+    font-family: var(--font-display);
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: var(--white);
+    margin-bottom: 0.6rem;
+    line-height: 1.35;
+}
+
+.enterprise-desc {
+    font-size: 0.78rem;
+    color: var(--grey-light);
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+}
+
+.calc-enterprise-card .btn-outline {
+    font-size: 0.78rem;
+    padding: 0.65rem 1.2rem;
 }
 
 /* Hotspots */
