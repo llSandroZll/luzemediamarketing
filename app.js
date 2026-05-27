@@ -1110,7 +1110,7 @@ const i18n = {
     }
 };
 
-let currentLang = 'es';
+let currentLang = 'en';
 
 function applyLanguage(lang) {
     currentLang = lang;
@@ -1143,7 +1143,10 @@ function applyLanguage(lang) {
         applyLanguage('en');
     });
 
-    applyLanguage('es');
+    // Default to English on load
+    btnEN?.classList.add('active');
+    btnES?.classList.remove('active');
+    applyLanguage('en');
 })();
 
 // ===== SMOOTH SCROLL =====
@@ -1183,4 +1186,26 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         }
     }, { threshold: 0.5 });
     obs.observe(bubble);
+})();
+
+// ===== THEME TOGGLE (LIGHT / DARK MODE) =====
+(function initThemeToggle() {
+    const toggle = document.getElementById('theme-toggle');
+    if (!toggle) return;
+
+    // Default to dark, but check localStorage
+    const savedTheme = localStorage.getItem('agency-theme') || 'dark';
+    if (savedTheme === 'light') {
+        document.body.classList.add('light-theme');
+        toggle.textContent = '☀️';
+    } else {
+        document.body.classList.remove('light-theme');
+        toggle.textContent = '🌙';
+    }
+
+    toggle.addEventListener('click', () => {
+        const isLight = document.body.classList.toggle('light-theme');
+        localStorage.setItem('agency-theme', isLight ? 'light' : 'dark');
+        toggle.textContent = isLight ? '☀️' : '🌙';
+    });
 })();

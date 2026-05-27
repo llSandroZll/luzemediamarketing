@@ -7,7 +7,16 @@
     <meta name="description" content="Impulsamos comercios locales, bodegas y casas rurales en Campo de Criptana. Páginas web, Google Maps, WhatsApp Business y Tours Virtuales 360°.">
     
     <!-- High-Security Content Security Policy (CSP) -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://fonts.googleapis.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://api.web3forms.com; connect-src 'self' https://api.web3forms.com;">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://api.web3forms.com https://www.google-analytics.com; connect-src 'self' https://api.web3forms.com https://www.google-analytics.com https://analytics.google.com;">
+    
+    <!-- Google Analytics 4 (GA4) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-N7WVZF51SF"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-N7WVZF51SF');
+    </script>
     
     <!-- LocalBusiness JSON-LD Structured SEO Schema -->
     <script type="application/ld+json">
@@ -87,10 +96,13 @@
 
             <div class="header-actions">
                 <div class="header-clock" id="header-clock">--:--</div>
+                <div class="theme-switch-container" style="display: flex; align-items: center; border: 1px solid var(--border); padding: 2px 4px; border-radius: 4px;">
+                    <button id="theme-toggle" style="background:none; border:none; color:var(--grey-light); font-size:0.75rem; cursor:pointer; padding:2px 6px; transition:color 0.3s;" aria-label="Toggle Theme">🌙</button>
+                </div>
                 <div class="lang-switch-container">
-                    <button class="lang-btn active" id="lang-es">ES</button>
+                    <button class="lang-btn" id="lang-es">ES</button>
                     <span class="lang-divider">|</span>
-                    <button class="lang-btn" id="lang-en">EN</button>
+                    <button class="lang-btn active" id="lang-en">EN</button>
                 </div>
                 <button class="mobile-toggle" id="mobile-toggle" aria-label="Toggle Navigation">
                     <span class="bar"></span>
@@ -511,17 +523,10 @@
                             </div>
                         </div>
                         <div class="contact-item fade-up">
-                            <div class="contact-icon">💬</div>
-                            <div>
-                                <h4 data-key="contact-wa-title">WhatsApp</h4>
-                                <p><a href="https://wa.me/34600000000" target="_blank" rel="noopener noreferrer" style="color:inherit; text-decoration:none;">+34 600 000 000</a></p>
-                            </div>
-                        </div>
-                        <div class="contact-item fade-up">
                             <div class="contact-icon">✉️</div>
                             <div>
                                 <h4 data-key="contact-mail-title">Email</h4>
-                                <p><a href="mailto:hola@luzemediamarketing.es" style="color:inherit; text-decoration:none;">hola@luzemediamarketing.es</a></p>
+                                <p><a href="mailto:luzemediamarketing@gmail.com" style="color:inherit; text-decoration:none;">luzemediamarketing@gmail.com</a></p>
                             </div>
                         </div>
                     </div>

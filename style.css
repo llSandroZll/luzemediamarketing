@@ -28,6 +28,22 @@
     --ease-bounce: cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
+/* Cool Light Version Variable Overrides */
+body.light-theme {
+    --black: #F8F6F2;
+    --off-black: #FFFFFF;
+    --surface: #FCFAF6;
+    --surface-2: #F1EFEA;
+    --border: rgba(6,6,8,0.06);
+    --border-light: rgba(6,6,8,0.12);
+    --white: #0A0A0E;
+    --grey: #828292;
+    --grey-light: #3D3D48;
+    --amber: #D98200; /* Rich contrast-safe amber gold in light mode */
+    --amber-dim: rgba(217,130,0,0.08);
+    --amber-glow: rgba(217,130,0,0.15);
+}
+
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 html { scroll-behavior: smooth; }
