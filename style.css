@@ -1481,16 +1481,22 @@ body::after {
 
 /* ===== RESPONSIVE ===== */
 @media (max-width: 1024px) {
-    .hero-container { grid-template-columns: 1fr; }
-    .hero-card { transform: none; max-width: 500px; }
-    .vision-inner { grid-template-columns: 1fr; }
-    .vision-left { position: static; }
-    .services-header { grid-template-columns: 1fr; gap: 1.5rem; }
-    .services-grid { grid-template-columns: 1fr; max-width: 500px; }
-    .showcase-header { grid-template-columns: 1fr; gap: 2rem; }
-    .calc-layout { grid-template-columns: 1fr; }
-    .calc-result-panel { position: static; }
-    .contact-layout { grid-template-columns: 1fr; }
+    .hero-container { grid-template-columns: 1fr; gap: 3.5rem; text-align: center; }
+    .hero-subtitle { margin-left: auto; margin-right: auto; }
+    .hero-cta-group { justify-content: center; }
+    .hero-stats { justify-content: center; }
+    .hero-card { transform: none; max-width: 500px; margin: 0 auto; }
+    .vision-inner { grid-template-columns: 1fr; gap: 4rem; }
+    .vision-left { position: static; text-align: center; }
+    .vision-accent-block { max-width: 550px; margin: 0 auto; }
+    .services-header { grid-template-columns: 1fr; gap: 1.5rem; text-align: center; }
+    .services-grid { grid-template-columns: 1fr; max-width: 500px; margin: 0 auto; }
+    .showcase-header { grid-template-columns: 1fr; gap: 2rem; text-align: center; }
+    .calc-layout { grid-template-columns: 1fr; gap: 3rem; }
+    .calc-result-panel { position: static; max-width: 600px; width: 100%; margin: 0 auto; }
+    .calc-options-panel { max-width: 600px; width: 100%; margin: 0 auto; }
+    .contact-layout { grid-template-columns: 1fr; gap: 4rem; }
+    .form-panel { max-width: 600px; width: 100%; margin: 0 auto; }
 }
 
 @media (max-width: 768px) {
@@ -1502,7 +1508,7 @@ body::after {
         position: fixed;
         top: 0; right: -100%;
         width: 280px; height: 100vh;
-        background: rgba(6,6,8,0.97);
+        background: var(--surface);
         backdrop-filter: blur(20px);
         border-left: 1px solid var(--border-light);
         flex-direction: column;
