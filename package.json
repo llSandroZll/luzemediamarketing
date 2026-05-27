@@ -1,0 +1,18 @@
+{
+  "name": "luze-media-marketing",
+  "version": "1.0.0",
+  "description": "Premium Landing Page & Business Platform for LUZE Media Marketing in Campo de Criptana",
+  "main": "index.html",
+  "scripts": {
+    "dev": "npx -y lite-server"
+  },
+  "keywords": [
+    "marketing",
+    "agency",
+    "360",
+    "virtual-tour",
+    "la-mancha"
+  ],
+  "author": "LUZE Media Marketing",
+  "license": "MIT"
+}
