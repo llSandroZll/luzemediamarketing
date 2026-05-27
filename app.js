@@ -876,7 +876,7 @@ const i18n = {
     }
 };
 
-let currentLang = 'en';
+let currentLang = 'es';
 
 function applyLanguage(lang) {
     currentLang = lang;
@@ -909,10 +909,10 @@ function applyLanguage(lang) {
         applyLanguage('en');
     });
 
-    // Default to English on load
-    btnEN?.classList.add('active');
-    btnES?.classList.remove('active');
-    applyLanguage('en');
+    // Default to Spanish on load
+    btnES?.classList.add('active');
+    btnEN?.classList.remove('active');
+    applyLanguage('es');
 })();
 
 // ===== SMOOTH SCROLL =====
