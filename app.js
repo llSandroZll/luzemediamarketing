@@ -7,9 +7,7 @@
 'use strict';
 
 // ===== PRODUCTION FORM SECURE CONFIGURATION =====
-// Replace with your Web3Forms access key to enable live lead delivery!
-const WEB3FORMS_ACCESS_KEY = "YOUR-ACCESS-KEY-HERE"; 
-const FORM_ENDPOINT = "https://api.web3forms.com/submit";
+const FORM_ENDPOINT = "https://formspree.io/f/xredovrj";
 
 // ===== CUSTOM CURSOR =====
 (function initCursor() {
@@ -194,6 +192,25 @@ const FORM_ENDPOINT = "https://api.web3forms.com/submit";
         el.dataset.delay = i * 0.15;
         obs.observe(el);
     });
+
+    // Trigger hero animations instantly on load to bypass IntersectionObserver for ATF (Above the Fold) content
+    setTimeout(() => {
+        const heroReveals = document.querySelectorAll('#hero .reveal-line');
+        const heroFades = document.querySelectorAll('#hero .fade-up');
+        
+        heroReveals.forEach((el, i) => {
+            setTimeout(() => {
+                el.classList.add('visible');
+                el.style.clipPath = 'inset(0 0 0% 0)';
+            }, i * 120);
+        });
+        
+        heroFades.forEach((el, i) => {
+            setTimeout(() => {
+                el.classList.add('visible');
+            }, 300 + i * 80);
+        });
+    }, 100);
 })();
 
 // ===== COUNT-UP ANIMATION =====
@@ -547,45 +564,37 @@ let updateMockupTourImage;
         const formData = new FormData(form);
         const data = Object.fromEntries(formData.entries());
 
-        // 2. Perform submission
-        if (WEB3FORMS_ACCESS_KEY && WEB3FORMS_ACCESS_KEY !== "YOUR-ACCESS-KEY-HERE") {
-            // Production AJAX secure transmission
-            const payload = {
-                access_key: WEB3FORMS_ACCESS_KEY,
-                subject: `Nueva Auditoría Digital - ${data.name || 'Negocio Local'}`,
-                from_name: "LUZE Media Marketing",
-                name: data.name,
-                phone: data.phone,
-                email: data.email || 'No proporcionado',
-                type: data.type,
-                message: data.message || 'Sin mensaje'
-            };
+        // 2. Perform submission to Formspree
+        const payload = {
+            name: data.name,
+            phone: data.phone,
+            email: data.email || 'No proporcionado',
+            type: data.type,
+            message: data.message || 'Sin mensaje'
+        };
 
-            fetch(FORM_ENDPOINT, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Accept": "application/json"
-                },
-                body: JSON.stringify(payload)
-            })
-            .then(res => res.json())
-            .then(resData => {
-                if (resData.success) {
-                    showSuccess();
-                } else {
-                    console.error("Submission error:", resData.message);
+        fetch(FORM_ENDPOINT, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            },
+            body: JSON.stringify(payload)
+        })
+        .then(res => {
+            if (res.ok) {
+                showSuccess();
+            } else {
+                return res.json().then(errData => {
+                    console.error("Submission error:", errData);
                     fallbackToMock(); // Fallback on API issues
-                }
-            })
-            .catch(err => {
-                console.error("Network error:", err);
-                fallbackToMock(); // Fallback on offline/network issues
-            });
-        } else {
-            // Mock Mode Fallback (simulated local testing)
-            setTimeout(showSuccess, 1200);
-        }
+                });
+            }
+        })
+        .catch(err => {
+            console.error("Network error:", err);
+            fallbackToMock(); // Fallback on offline/network issues
+        });
 
         function showSuccess() {
             if (success) success.classList.add('show');
