@@ -553,16 +553,16 @@
                         <input type="checkbox" name="botcheck" class="hidden" style="display: none;" tabindex="-1" autocomplete="off">
                         <div class="form-group">
                             <label for="client-name" data-key="form-label-name">Nombre / Negocio</label>
-                            <input type="text" id="client-name" name="name" required placeholder="Ej. Bar Castillo / Bodega Vidal">
+                            <input type="text" id="client-name" name="name" required data-key="form-placeholder-name" placeholder="Ej. Bar Castillo / Casa Rural">
                         </div>
                         <div class="form-row">
                             <div class="form-group">
                                 <label for="client-phone" data-key="form-label-phone">Teléfono (WhatsApp)</label>
-                                <input type="tel" id="client-phone" name="phone" required placeholder="600 000 000">
+                                <input type="tel" id="client-phone" name="phone" required data-key="form-placeholder-phone" placeholder="600 000 000">
                             </div>
                             <div class="form-group">
                                 <label for="client-email" data-key="form-label-email">Email (Opcional)</label>
-                                <input type="email" id="client-email" name="email" placeholder="tu@correo.com">
+                                <input type="email" id="client-email" name="email" data-key="form-placeholder-email" placeholder="tu@correo.com">
                             </div>
                         </div>
                         <div class="form-group">
@@ -576,7 +576,7 @@
                         </div>
                         <div class="form-group">
                             <label for="client-message" data-key="form-label-msg">¿En qué podemos ayudarte?</label>
-                            <textarea id="client-message" name="message" rows="3" placeholder="Quiero mejorar mi ficha de Google Maps, hacer fotos de mi casa rural, crear una web..."></textarea>
+                            <textarea id="client-message" name="message" rows="3" data-key="form-placeholder-msg" placeholder="Quiero mejorar mi ficha de Google Maps, hacer fotos de mi casa rural, crear una web..."></textarea>
                         </div>
                         <button type="submit" class="btn btn-primary btn-block magnetic" id="form-submit-btn" data-key="form-btn">Solicitar Auditoría Gratuita</button>
                     </form>
