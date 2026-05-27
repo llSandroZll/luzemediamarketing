@@ -489,6 +489,32 @@ let updateMockupTourImage;
         if (el) el.addEventListener('change', update);
     });
 
+    // GA4 Telemetry: track pricing calculator and B2B Enterprise proposal clicks
+    const ctaBtn = document.getElementById('calc-cta-btn');
+    if (ctaBtn) {
+        ctaBtn.addEventListener('click', () => {
+            if (window.gtag) {
+                window.gtag('event', 'click_calculator_cta', {
+                    'event_category': 'Engagement',
+                    'setup_cost': setupEl?.textContent || '0',
+                    'monthly_cost': monthlyEl?.textContent || '0'
+                });
+            }
+        });
+    }
+
+    const entBtn = document.querySelector('.calc-enterprise-card a');
+    if (entBtn) {
+        entBtn.addEventListener('click', () => {
+            if (window.gtag) {
+                window.gtag('event', 'click_enterprise_cta', {
+                    'event_category': 'Engagement',
+                    'event_label': 'Enterprise Card Click'
+                });
+            }
+        });
+    }
+
     update();
 })();
 
@@ -563,6 +589,16 @@ let updateMockupTourImage;
 
         function showSuccess() {
             if (success) success.classList.add('show');
+
+            // GA4 Telemetry: track conversion lead event
+            if (window.gtag) {
+                window.gtag('event', 'generate_lead', {
+                    'event_category': 'Engagement',
+                    'event_label': data.type || 'General',
+                    'value': 1
+                });
+            }
+
             form.reset();
             resetButton();
         }
