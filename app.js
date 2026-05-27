@@ -7,7 +7,7 @@
 'use strict';
 
 // ===== PRODUCTION FORM SECURE CONFIGURATION =====
-const FORM_ENDPOINT = "https://formspree.io/f/xredovrj";
+const FORM_ENDPOINT = "https://formspree.io/f/mlgvajgr";
 
 // ===== CUSTOM CURSOR =====
 (function initCursor() {
