@@ -5,6 +5,53 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LUZE Media Marketing | Agencia Digital en Campo de Criptana</title>
     <meta name="description" content="Impulsamos comercios locales, bodegas y casas rurales en Campo de Criptana. Páginas web, Google Maps, WhatsApp Business y Tours Virtuales 360°.">
+    
+    <!-- High-Security Content Security Policy (CSP) -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://fonts.googleapis.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://api.web3forms.com; connect-src 'self' https://api.web3forms.com;">
+    
+    <!-- LocalBusiness JSON-LD Structured SEO Schema -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "ProfessionalService",
+      "name": "LUZE Media Marketing",
+      "image": "https://www.luzemediamarketing.com/LUZE%20Logo.png",
+      "@id": "https://www.luzemediamarketing.com",
+      "url": "https://www.luzemediamarketing.com",
+      "telephone": "+34600000000",
+      "priceRange": "$$",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Plaza Mayor",
+        "addressLocality": "Campo de Criptana",
+        "addressRegion": "Ciudad Real",
+        "postalCode": "13610",
+        "addressCountry": "ES"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": 39.4069,
+        "longitude": -3.1245
+      },
+      "openingHoursSpecification": {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": [
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday",
+          "Friday"
+        ],
+        "opens": "09:00",
+        "closes": "19:00"
+      },
+      "sameAs": [
+        "https://www.instagram.com/luzemediamarketing"
+      ]
+    }
+    </script>
+
+    <link rel="icon" type="image/png" href="images/favicon.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;700;800;900&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
@@ -467,14 +514,14 @@
                             <div class="contact-icon">💬</div>
                             <div>
                                 <h4 data-key="contact-wa-title">WhatsApp</h4>
-                                <p>+34 600 000 000</p>
+                                <p><a href="https://wa.me/34600000000" target="_blank" rel="noopener noreferrer" style="color:inherit; text-decoration:none;">+34 600 000 000</a></p>
                             </div>
                         </div>
                         <div class="contact-item fade-up">
                             <div class="contact-icon">✉️</div>
                             <div>
                                 <h4 data-key="contact-mail-title">Email</h4>
-                                <p>hola@luzemediamarketing.es</p>
+                                <p><a href="mailto:hola@luzemediamarketing.es" style="color:inherit; text-decoration:none;">hola@luzemediamarketing.es</a></p>
                             </div>
                         </div>
                     </div>
@@ -485,6 +532,8 @@
                     <p class="form-subtitle" data-key="form-subtitle">Analizamos tu visibilidad en Google Maps, fotos y redes sin coste alguno.</p>
 
                     <form id="audit-form" class="audit-form">
+                        <!-- Honeypot anti-spam check (hidden from users, completed only by bots) -->
+                        <input type="checkbox" name="botcheck" class="hidden" style="display: none;" tabindex="-1" autocomplete="off">
                         <div class="form-group">
                             <label for="client-name" data-key="form-label-name">Nombre / Negocio</label>
                             <input type="text" id="client-name" name="name" required placeholder="Ej. Bar Castillo / Bodega Vidal">
