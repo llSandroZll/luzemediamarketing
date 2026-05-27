@@ -432,14 +432,14 @@ let updateMockupTourImage;
     updateMockupTourImage = function(isLight) {
         if (isLight) {
             img.src = 'images/hotel_bachiller_cave.jpg';
-            img.alt = 'La Casa del Bachiller Cave Room';
+            img.alt = 'La Casa del Bachiller Boutique Room';
             
             // Set dynamic light theme location
             if (locationText) {
                 locationText.dataset.key = 'showcase-location-badge-light';
                 locationText.innerHTML = currentLang === 'es' 
-                    ? 'La Casa del Bachiller — Alojamiento de Cueva' 
-                    : 'La Casa del Bachiller — Historic Cave Stay';
+                    ? 'La Casa del Bachiller — Alojamiento Singular' 
+                    : 'La Casa del Bachiller — Historic Boutique Stay';
             }
         } else {
             img.src = 'images/winery_castiblanque.jpg';
@@ -449,8 +449,8 @@ let updateMockupTourImage;
             if (locationText) {
                 locationText.dataset.key = 'showcase-location-badge';
                 locationText.innerHTML = currentLang === 'es' 
-                    ? 'Bodegas Castiblanque — Cueva de Crianza' 
-                    : 'Bodegas Castiblanque — Historic Wine Cave';
+                    ? 'Campo de Criptana — Tierra de Gigantes y Vinos' 
+                    : 'Campo de Criptana — Land of Giants & Fine Wines';
             }
         }
     };
@@ -681,16 +681,16 @@ const i18n = {
         'service-title-3': 'Enoturismo & Marca Industrial',
         'service-desc-3': 'Para bodegas D.O. La Mancha y fábricas que quieren exportar y atraer turismo premium.',
         'setup-label-3': 'Proyecto a medida',
-        'showcase-label': 'Caso de Éxito 360°',
-        'showcase-title': 'Visualiza la<br>calidad real.',
-        'showcase-subtitle': 'Pasa el ratón para activar el efecto de ventana 3D. Esta es la nitidez profesional e interactividad 8K que verán tus clientes internacionales antes de reservar.',
-        'showcase-launch-btn': 'Probar Tour 360° Real →',
-        'showcase-location-badge': 'Bodegas Castiblanque — Cueva de Crianza',
-        'showcase-location-badge-light': 'La Casa del Bachiller — Alojamiento de Cueva',
-        'hs-title-1': 'Crianza Tradicional',
-        'hs-desc-1': 'Barricas de roble americano bajo la temperatura constante de la cueva manchega.',
-        'hs-title-2': 'Arquitectura Excavada',
-        'hs-desc-2': 'Cueva natural excavada a mano en la roca de Campo de Criptana.',
+        'showcase-label': 'Caso de Éxito Digital',
+        'showcase-title': 'Vinos con Historia,<br>Diseño de Autor.',
+        'showcase-subtitle': 'Un escaparate interactivo que traslada al visitante directamente a tus tierras. Diseñamos la presencia digital premium que las bodegas tradicionales y los alojamientos de La Mancha merecen.',
+        'showcase-launch-btn': 'Ver Caso de Éxito Criptana 360 →',
+        'showcase-location-badge': 'Campo de Criptana — Tierra de Gigantes y Vinos',
+        'showcase-location-badge-light': 'La Casa del Bachiller — Alojamiento Singular',
+        'hs-title-1': 'Diseño Premium',
+        'hs-desc-1': 'Combinamos imágenes espectaculares con una interfaz fluida e interactiva de nivel internacional.',
+        'hs-title-2': 'Tierra de Gigantes',
+        'hs-desc-2': 'La belleza icónica de los molinos de Campo de Criptana inspira cada uno de nuestros diseños.',
         'calc-label': 'Planes Pyme & SME',
         'calc-title': 'Kits Digitales y Starter Plans',
         'calc-subtitle': 'Transparencia total. Selecciona los servicios express para tu comercio local o calcula una base.',
@@ -800,16 +800,16 @@ const i18n = {
         'service-title-3': 'Wine Tourism & Industrial Brand',
         'service-desc-3': 'For D.O. La Mancha wineries and agri-food factories wanting to export and attract premium tourism.',
         'setup-label-3': 'Custom project',
-        'showcase-label': '360° Case Study',
-        'showcase-title': 'Visualize the<br>true quality.',
-        'showcase-subtitle': 'Hover your mouse to trigger the fluid 3D parallax effect. This is the 8K pixel-perfect quality and interactivity that international tourists see before booking.',
-        'showcase-launch-btn': 'Try Real 360° Tour →',
-        'showcase-location-badge': 'Bodegas Castiblanque — Historic Wine Cave',
-        'showcase-location-badge-light': 'La Casa del Bachiller — Historic Cave Stay',
-        'hs-title-1': 'Traditional Aging',
-        'hs-desc-1': 'American oak barrels under the constant temperature of the La Mancha cave.',
-        'hs-title-2': 'Excavated Architecture',
-        'hs-desc-2': 'Natural cave hand-excavated from the rock of Campo de Criptana.',
+        'showcase-label': 'Digital Case Study',
+        'showcase-title': 'Wines with History,<br>Bespoke Design.',
+        'showcase-subtitle': 'An interactive showcase that transports visitors directly to your land. We design the premium digital presence that traditional wineries and unique lodgings across La Mancha deserve.',
+        'showcase-launch-btn': 'Visit Criptana 360 Portal →',
+        'showcase-location-badge': 'Campo de Criptana — Land of Giants & Fine Wines',
+        'showcase-location-badge-light': 'La Casa del Bachiller — Historic Boutique Stay',
+        'hs-title-1': 'Premium Design',
+        'hs-desc-1': 'We blend breathtaking imagery with a fluid, world-class interactive experience.',
+        'hs-title-2': 'Land of Giants',
+        'hs-desc-2': 'The iconic beauty of Campo de Criptana\'s windmills inspires every detail of our work.',
         'calc-label': 'SME Starter Plans',
         'calc-title': 'Digital Kits & Starter Packages',
         'calc-subtitle': 'Total transparency. Select the express services for your local trade or calculate a baseline project.',
