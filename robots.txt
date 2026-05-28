@@ -1,0 +1,8 @@
+# 🤖 LUZE Media Marketing Robots Configuration
+# https://www.luzemediamarketing.com/
+
+User-agent: *
+Allow: /
+
+# Link to your XML Sitemap
+Sitemap: https://www.luzemediamarketing.com/sitemap.xml
