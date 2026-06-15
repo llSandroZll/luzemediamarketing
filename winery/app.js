@@ -883,6 +883,13 @@
       );
       var waLink = 'https://wa.me/34651122982?text=' + msg;
 
+      if (window.gtag) {
+        window.gtag('event', 'tasting_booking_request', {
+          'event_category': 'Engagement',
+          'event_label': 'Winery Tasting Booking'
+        });
+      }
+
       showSuccessOverlay(
         '¡Reserva Recibida!',
         'Nos pondremos en contacto contigo pronto para confirmar tu experiencia de cata.',
@@ -918,6 +925,13 @@
     }
 
     setTimeout(function () {
+      if (window.gtag) {
+        window.gtag('event', 'contact_form_submission', {
+          'event_category': 'Engagement',
+          'event_label': 'Winery Contact Form'
+        });
+      }
+
       showSuccessOverlay(
         '¡Mensaje Enviado!',
         'Gracias por contactarnos. Te responderemos en un plazo de 24 horas.'
