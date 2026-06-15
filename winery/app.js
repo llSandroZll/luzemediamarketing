@@ -881,7 +881,7 @@
         '¡Hola! Soy ' + name + '. Quiero reservar una cata para ' +
         guests + ' personas el día ' + date + '. ¿Está disponible?'
       );
-      var waLink = 'https://wa.me/34600000000?text=' + msg;
+      var waLink = 'https://wa.me/34651122982?text=' + msg;
 
       showSuccessOverlay(
         '¡Reserva Recibida!',
@@ -1136,7 +1136,7 @@ function showSuccessOverlay(title, message, waLink) {
       'contact.email.label': 'Email',
       'contact.email': 'info@tierradegigantes.es',
       'contact.whatsapp.label': 'WhatsApp',
-      'contact.whatsapp': '+34 600 000 000',
+      'contact.whatsapp': '+34 651 122 982',
       'social.instagram': 'Instagram',
       'social.facebook': 'Facebook',
       'social.youtube': 'YouTube',
@@ -1290,7 +1290,7 @@ function showSuccessOverlay(title, message, waLink) {
       'contact.email.label': 'Email',
       'contact.email': 'info@tierradegigantes.es',
       'contact.whatsapp.label': 'WhatsApp',
-      'contact.whatsapp': '+34 600 000 000',
+      'contact.whatsapp': '+34 651 122 982',
       'social.instagram': 'Instagram',
       'social.facebook': 'Facebook',
       'social.youtube': 'YouTube',
@@ -1371,7 +1371,7 @@ function showSuccessOverlay(title, message, waLink) {
       var msg = encodeURIComponent(
         '¡Hola! Quiero pedir ' + wineName + '. ¿Está disponible?'
       );
-      var url = 'https://wa.me/34600000000?text=' + msg;
+      var url = 'https://wa.me/34651122982?text=' + msg;
       window.open(url, '_blank', 'noopener');
     });
   });

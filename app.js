@@ -310,6 +310,11 @@ const FORM_ENDPOINT = "https://formspree.io/f/mlgvajgr";
             gap: 10px;
             z-index: 10;
         }
+        @media (max-width: 768px) {
+            .scroll-indicator {
+                display: none;
+            }
+        }
         .scroll-line {
             width: 1px;
             height: 50px;
@@ -432,7 +437,7 @@ let updateMockupTourImage;
     updateMockupTourImage = function(isLight) {
         if (isLight) {
             img.src = 'images/hotel_bachiller_cave.jpg';
-            img.alt = 'La Casa del Bachiller Boutique Room';
+            img.alt = 'La Casa del Bachiller Boutique Room - tour virtual 360 inmobiliaria la mancha';
             
             // Set dynamic light theme location
             if (locationText) {
@@ -442,8 +447,8 @@ let updateMockupTourImage;
                     : 'La Casa del Bachiller — Historic Boutique Stay';
             }
         } else {
-            img.src = 'images/winery_castiblanque.jpg';
-            img.alt = 'Bodegas Castiblanque Wine Cellar';
+            img.src = 'images/winery_castiblanque.png';
+            img.alt = 'Bodegas Castiblanque Wine Cellar - diseño web bodegas campo de criptana';
             
             // Set dynamic dark theme location
             if (locationText) {
@@ -641,7 +646,7 @@ const i18n = {
         'hero-title-1': 'Levantamos',
         'hero-title-2': 'Gigantes',
         'hero-title-3': 'Digitales.',
-        'hero-subtitle': 'Marketing artesanal y desarrollo web premium desde la Tierra de Gigantes para los creadores de experiencias de Castilla-La Mancha. Ayudamos a bodegas tradicionales, hoteles-cueva singulares y marcas de hospitalidad de Toledo, Ciudad Real y Cuenca a capturar clientes internacionales mediante SEO de alta precisión y diseño digital interactivo.',
+        'hero-subtitle': 'Creamos páginas web de alto rendimiento, fichas de Google Maps optimizadas y soluciones multimedia avanzadas para comercios, profesionales autónomos, promotoras inmobiliarias y el sector de bodegas y grandes empresas industriales en Castilla-La Mancha. Sin rodeos, sin letra pequeña.',
         'hero-btn-primary': 'Configurar Mi Plan',
         'hero-btn-secondary': 'Ver Tour 360° →',
         'stat-label-1': 'Más visibilidad local',
@@ -672,15 +677,18 @@ const i18n = {
         'services-label': 'Lo Que Hacemos',
         'services-title': 'Tres planes.<br>Una comarca.<br>Sin límites.',
         'services-subtitle': 'Sin jerga tecnológica. Tres soluciones directas y rápidas con precios transparentes adaptados a bodegas, alojamientos singulares y comercio local de Castilla-La Mancha.',
-        'service-title-1': 'Comercio Local Exprés',
-        'service-desc-1': 'Ideal para bares, panaderías y pequeños comercios que quieren clientes directos sin complicaciones.',
-        'setup-label-1': 'Desde 149€ de alta',
-        'service-title-2': 'Alojamientos & Inmobiliaria 360°',
-        'service-desc-2': 'Para casas rurales, casas cueva y agencias que quieren cerrar reservas desde internet.',
-        'setup-label-2': 'Pago único por propiedad',
-        'service-title-3': 'Enoturismo & Marca Industrial',
-        'service-desc-3': 'Para bodegas D.O. La Mancha y fábricas que quieren exportar y atraer turismo premium.',
-        'setup-label-3': 'Proyecto a medida',
+        'service-title-1': 'Presencia Local y Captación Directa',
+        'service-desc-1': 'Optimizado para comercios de barrio, restauración y servicios técnicos autónomos (reformas, electricidad, fontanería). Si dependes de que tu zona te encuentre en Google Maps y te llame de inmediato por una urgencia, hacemos que tu teléfono no pare de sonar.',
+        'setup-label-1': '149€ Setup inicial',
+        'price-monthly-1': '+19€<small>/mes mant.</small>',
+        'service-title-2': 'Imagen Premium y Espacios Interactivos',
+        'service-desc-2': 'Diseñado para inmobiliarias, constructoras, estudios de arquitectura y alojamientos rurales. Elevamos el valor percibido de tus propiedades con fotografía arquitectónica de alta gama y tours virtuales 360° interactivos para cerrar ventas sobre plano.',
+        'setup-label-2': 'Por sesión / propiedad',
+        'price-monthly-2': '349€',
+        'service-title-3': 'Enoturismo, Bodegas y Sistemas a Medida',
+        'service-desc-3': 'Desarrollado específicamente para bodegas, cooperativas vinícolas y complejos industriales. Implementamos motores de reserva interactivos para catas, portales multiidioma de exportación, paneles de datos en vivo y automatizaciones que eliminan la carga administrativa manual.',
+        'setup-label-3': 'Presupuesto a Medida',
+        'price-monthly-3': 'Consultar',
         'showcase-label': 'Caso de Éxito Digital',
         'showcase-title': 'Vinos con Historia,<br>Diseño de Autor.',
         'showcase-subtitle': 'Un escaparate interactivo que traslada al visitante directamente a tus tierras. Diseñamos la presencia digital premium que las bodegas tradicionales y los alojamientos de La Mancha merecen.',
@@ -738,29 +746,28 @@ const i18n = {
         'success-close': 'Entendido',
         'footer-privacy': 'Privacidad',
         'footer-legal': 'Aviso Legal',
-        's1-f1': 'Optimización de Google Maps',
-        's1-f2': 'WhatsApp Business + catálogo',
-        's1-f3': 'Web Tarjeta ultrarrápida',
-        's1-f4': 'Stand QR físico para escaparate',
-        's2-f1': 'Fotografía HDR profesional',
-        's2-f2': 'Tour Virtual 360° interactivo',
-        's2-f3': 'Integración en Booking, Airbnb, Idealista',
-        's2-f4': 'Optimización para turismo nacional',
-        's3-f1': 'Web con motor de reservas para catas',
-        's3-f2': 'Tour 360° de cuevas y barricas',
-        's3-f3': 'Producción de video (Reels / TikTok)',
-        's3-f4': 'Campañas en Madrid y provincia',
-        'opt-1': 'Pequeño Comercio / Bar / Tienda',
-        'opt-2': 'Bodega de Vino (D.O. La Mancha)',
-        'opt-3': 'Casa Rural / Casa Cueva / Alojamiento',
-        'opt-4': 'Agencia Inmobiliaria',
+        's1-f1': 'Ficha Google Maps / Local SEO totalmente optimizada',
+        's1-f2': 'Página Web de Contacto Rápido (Ultra Veloz en Móviles)',
+        's1-f3': 'Código QR Físico para vitrina o escaparate',
+        's1-f4': 'Hosting dedicado, seguridad SSL y soporte incluidos',
+        's2-f1': 'Fotografía Técnica de Arquitectura e Interiores',
+        's2-f2': 'Tour Virtual Interactivo 360° de Alta Resolución',
+        's2-f3': 'Dossier Visual enfocado a Licitaciones o Venta sobre Plano',
+        's2-f4': 'Optimización de presencia en portales específicos',
+        's3-f1': 'Motores de reserva interactivos y pasarelas de pago para experiencias de enoturismo',
+        's3-f2': 'Páginas web corporativas premium con optimización SEO para exportación internacional',
+        's3-f3': 'Desarrollo de software a medida, automatizaciones de procesos y paneles de analítica en vivo',
+        's3-f4': 'Integración y sincronización de datos con sistemas de gestión interna (ERP/CRM)',
+        'opt-1': 'Comercio de Barrio, Bar, Restaurante o Servicio Técnico Autónomo (Reformas, Electricidad, Fontanería)',
+        'opt-2': 'Inmobiliaria, Promotora, Constructora o Gestión de Alojamientos Turísticos / Casas Rurales',
+        'opt-3': 'Bodega, Cooperativa Vinícola, Enoturismo o Complejo Industrial',
     },
     en: {
         'hero-badge': 'Premium Digital Design & SEO · Castile-La Mancha',
         'hero-title-1': 'We Build',
         'hero-title-2': 'Digital',
         'hero-title-3': 'Giants.',
-        'hero-subtitle': 'Premium digital design and organic SEO crafted in Cervantes\' land of giants, elevating boutique hospitality, wineries, and local brands across Castile-La Mancha. We bridge the gap between Castile\'s ancient landscapes and the global digital market, helping D.O. La Mancha vineyards and luxury cave accommodations rank, convert, and scale.',
+        'hero-subtitle': 'We build high-performance websites, optimized Google Maps profiles, and advanced multimedia solutions for local shops, independent trade contractors, real estate developers, and premium wineries across Castilla-La Mancha.',
         'hero-btn-primary': 'Build My Plan',
         'hero-btn-secondary': 'See 360° Tour →',
         'stat-label-1': 'More local visibility',
@@ -791,15 +798,18 @@ const i18n = {
         'services-label': 'What We Do',
         'services-title': 'Three plans.<br>One region.<br>No limits.',
         'services-subtitle': 'No tech jargon. Three direct, high-performance digital solutions with transparent pricing tailored for wineries, unique lodgings, and local trades across Castile-La Mancha.',
-        'service-title-1': 'Local Commerce Express',
-        'service-desc-1': 'Perfect for bars, bakeries and small businesses that want direct customers without complexity.',
-        'setup-label-1': 'From €149 setup',
-        'service-title-2': 'Lodgings & Real Estate 360°',
-        'service-desc-2': 'For rural houses, cave houses and agencies wanting to close bookings online.',
-        'setup-label-2': 'One-time payment per property',
-        'service-title-3': 'Wine Tourism & Industrial Brand',
-        'service-desc-3': 'For D.O. La Mancha wineries and agri-food factories wanting to export and attract premium tourism.',
-        'setup-label-3': 'Custom project',
+        'service-title-1': 'Local Presence & Direct Leads',
+        'service-desc-1': 'Designed for neighborhood shops, hospitality, clinics, and independent technical services (electricians, plumbers, renovations). If you depend on local clients finding you on Google Maps, clicking your address, or calling you for emergency services, we optimize your digital channel to generate immediate contacts.',
+        'setup-label-1': '€149 Setup fee',
+        'price-monthly-1': '+19€<small>/mo maint.</small>',
+        'service-title-2': 'Premium Media & Interactive Spaces',
+        'service-desc-2': 'Designed for the real estate sector, developers, builders, architecture studios, and tourist accommodations. When your product sells through visual appeal, mediocrity costs you money. We create professional reportages and 360° virtual reality experiences to elevate the value of your projects or sell off-plan developments.',
+        'setup-label-2': 'Per session / property',
+        'price-monthly-2': '€349',
+        'service-title-3': 'Wineries, Enotourism & Custom Enterprise',
+        'service-desc-3': 'Specifically designed for wineries, wine cooperatives, and industrial companies with demanding operations. We develop interactive booking engines for tastings and wine tourism experiences, real-time data dashboards, multi-language websites for export, and automated software flows that eliminate repetitive manual tasks.',
+        'setup-label-3': 'Custom Quote',
+        'price-monthly-3': 'Inquire',
         'showcase-label': 'Digital Case Study',
         'showcase-title': 'Wines with History,<br>Bespoke Design.',
         'showcase-subtitle': 'An interactive showcase that transports visitors directly to your land. We design the premium digital presence that traditional wineries and unique lodgings across La Mancha deserve.',
@@ -857,22 +867,21 @@ const i18n = {
         'success-close': 'Got it',
         'footer-privacy': 'Privacy',
         'footer-legal': 'Legal Notice',
-        's1-f1': 'Google Maps optimisation',
-        's1-f2': 'WhatsApp Business + catalogue',
-        's1-f3': 'Ultra-fast card website',
-        's1-f4': 'Physical QR stand for window',
-        's2-f1': 'Professional HDR photography',
-        's2-f2': 'Interactive 360° Virtual Tour',
-        's2-f3': 'Integration on Booking, Airbnb, Idealista',
-        's2-f4': 'Optimisation for national tourism',
-        's3-f1': 'Website with tasting booking engine',
-        's3-f2': '360° tour of caves and barrels',
-        's3-f3': 'Video production (Reels / TikTok)',
-        's3-f4': 'Campaigns in Madrid and province',
-        'opt-1': 'Small Commerce / Bar / Shop',
-        'opt-2': 'Winery (D.O. La Mancha)',
-        'opt-3': 'Rural House / Cave House / Lodging',
-        'opt-4': 'Real Estate Agency',
+        's1-f1': 'Fully optimized Google Maps / Local SEO profile',
+        's1-f2': 'Quick Contact Website (Ultra-Fast on Mobile)',
+        's1-f3': 'Physical QR Code for window display or counter',
+        's1-f4': 'Dedicated hosting, SSL security, and support included',
+        's2-f1': 'Technical Photography for Architecture & Interiors',
+        's2-f2': 'High-Resolution 360° Interactive Virtual Tour',
+        's2-f3': 'Visual Dossier focused on Tenders or Off-Plan Sales',
+        's2-f4': 'Presence optimization on sector-specific portals',
+        's3-f1': 'Interactive booking engines and payment gateways for wine tourism',
+        's3-f2': 'Premium corporate websites with SEO optimization for international export',
+        's3-f3': 'Custom software development, process automation, and live analytics dashboards',
+        's3-f4': 'Integration and data synchronization with internal management systems (ERP/CRM)',
+        'opt-1': 'Neighborhood Store, Bar, Restaurant or Freelance Technical Service (Renovations, Electricity, Plumbing)',
+        'opt-2': 'Real Estate, Developer, Builder or Tourist Lodging Management / Rural Houses',
+        'opt-3': 'Winery, Wine Cooperative, Wine Tourism or Industrial Complex',
     }
 };
 
